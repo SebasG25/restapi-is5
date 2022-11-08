@@ -1,5 +1,5 @@
-const contactsData = require('../utils/data.json')
 const { handleHttpError } = require('../utils/handleError')
+const { contactsModel } = require('../models')
 
 /**
  * It's an async function that gets all the contacts from the database and sends them back to the
@@ -9,7 +9,8 @@ const { handleHttpError } = require('../utils/handleError')
  */
 const getContacts = async (req, res) => {
     try {
-        res.send({ contactsData })
+        const data = await contactsModel.find({})
+        res.send({ contactsData: data })
     } catch (error) {
         handleHttpError(res, 'ERROR_GET_CONTACTS')
     }
@@ -25,7 +26,7 @@ const getContact = async (req, res) => {
     try {
         const { id } = req.params
         const data = await contactsModel.findById(id)
-        res.send({ contactsData: data })
+        res.send({ contactData: data })
     } catch (error) {
         handleHttpError(res, 'ERROR_GET_CONTACT')
     }
@@ -41,7 +42,7 @@ const addContact = async (req, res) => {
     try {
         const { body } = req
         const data = await contactsModel.create(body)
-        res.send({ contactsData: data })
+        res.send({ contactData: data })
     } catch (error) {
         handleHttpError(res, 'ERROR_ADD_CONTACT')
     }
@@ -58,7 +59,7 @@ const updateContact = async (req, res) => {
         const { body, params } = req
         const { id } = params
         const data = await contactsModel.findByIdAndUpdate(id, body)
-        res.send({ contactsData: data })
+        res.send({ contactData: data })
     } catch (error) {
         handleHttpError(res, 'ERROR_UPDATE_CONTACT')
     }
@@ -73,7 +74,7 @@ const deleteContact = async (req, res) => {
     try {
         const { id } = req.params
         const data = await contactsModel.findByIdAndDelete(id)
-        res.send({ contactsData: data })
+        res.send({ contactData: data })
     } catch (error) {
         handleHttpError(res, 'ERROR_DELETE_CONTACTS')
     }
